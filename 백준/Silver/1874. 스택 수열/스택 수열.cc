@@ -1,34 +1,44 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <stack>
 using namespace std;
+
 int main() {
-	int num,k=1;
-	queue<int> q;
-	stack<int> a;
-	queue<char> result;
-	cin>>num;
-	for(int i=0;i<num;i++){
-		int tmp;
-		cin>>tmp;
-		q.push(tmp);
-	}
-	while(!q.empty()){
-		if(!a.empty() && q.front()==a.top()){
-			q.pop();
-			a.pop();
-			result.push('-');	
-		}
-		else if(k<=q.front()){
-            result.push('+');
-			a.push(k++);
-		}else{
-			cout<<"NO";
-			return 0;
-		}
-	}
-	while(!result.empty()){
-		char tmp=result.front(); //result를 string으로 쓰면 틀림. 
-		cout<<tmp<<"\n";
-		result.pop();
-	}
-	return 0;
+    int n = 0, present = 1;
+    bool possible = true;
+    string result="";
+    stack<int> number;
+
+    cin >> n;
+
+    for (int i = 0; i < n; i++) {
+        int temp;
+        cin >> temp;
+
+        while (present <= temp) {
+            number.push(present);
+            present++;
+            result+='+';
+        }
+
+        if (temp == number.top()) {
+            result += '-';
+            number.pop();
+        }
+        else {
+            possible = false;
+            break;
+        }
+    }
+
+    if (possible) {
+        for (int i = 0; i < result.size(); i++) {
+            cout << result[i] << "\n";
+        }
+     }
+    else {
+        cout << "NO";
+    }
+
+    return 0;
 }
