@@ -9,8 +9,8 @@ int main() {
     int whole = 0;
     while (getline(cin, name) && !name.empty()) {
         whole++;
-        if (!tree[name]) { tree[name] = 1; }
-        else { tree[name]++; }
+        if (!tree[name]) { tree[name] = 0; }
+        tree[name]++;
     }
 
     for (auto iter : tree) {
