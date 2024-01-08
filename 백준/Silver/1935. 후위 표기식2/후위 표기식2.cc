@@ -9,7 +9,7 @@ int main() {
     int n = 0;//피연산자 개수 입력받을 변수
     cin >> n;//피연산자 개수 입력받기
     string str = "";//후위표기식 입력받을 변수
-    stack<double> num;
+    stack<double> num;//피연산자 저장 stack
     int* number_array = new int[n];//피연산자 대응하는 값 저장할 정수 배열
     cin >> str;//후의 표기식 입력받기
 
