@@ -14,9 +14,8 @@ int main() {
     }
 
     for (auto iter : tree) {
-        cout.precision(4);
-        cout << fixed;
-        cout << iter.first << " " << ((double)iter.second / whole) * 100 << "\n";
+        cout.precision(4);//소수점 제한
+        cout << fixed << iter.first << " " << ((double)iter.second / whole) * 100 << "\n";
     }
     return 0;
 }
