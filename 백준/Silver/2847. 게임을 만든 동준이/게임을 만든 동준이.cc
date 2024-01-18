@@ -23,4 +23,5 @@ int main() {
         }
     }
     cout << dec;
+    delete[] score;
 }
