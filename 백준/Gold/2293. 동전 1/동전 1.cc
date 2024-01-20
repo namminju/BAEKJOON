@@ -30,5 +30,6 @@ int main() {
         }
     } 
     cout << dp[sum];
+    delete[] dp;
     return 0;
 }
