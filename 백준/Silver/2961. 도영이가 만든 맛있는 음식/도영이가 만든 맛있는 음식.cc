@@ -43,5 +43,6 @@ int main() {
     }
 
     cout << result;
+    delete[] in;
     return 0;
 }
