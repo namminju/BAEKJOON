@@ -35,7 +35,7 @@ int main() {
     for (int r = 0; r < m; r++) {
         int x1, x2, y1, y2;
         cin >> x1 >> y1 >> x2 >> y2;
-        x1--; y1--; x2--; y2--; // Adjust indices
+        x1--; y1--; x2--; y2--;
         if (x1 == 0 && y1 == 0) {
             cout << graph[x2][y2] << '\n';
         }
@@ -47,6 +47,7 @@ int main() {
         }
         else {
             cout << graph[x2][y2] - graph[x1 - 1][y2] - graph[x2][y1 - 1] + graph[x1 - 1][y1 - 1] << '\n';
+            //이전 값과 왼쪽값 제거
         }
     }
 
