@@ -1,22 +1,77 @@
 #include <iostream>
+#include <iomanip>
+#include <unordered_map>
+#include <vector>
+#include <algorithm>
 #include <string>
-#include <map>
+#include <set>
 using namespace std;
 
-int main() {
-    string name;//
-    map<string,int> tree;//문자열(tree 이름; key), 정수(개수; value)
-    int whole = 0;//전체 입력의 개수
-    while (getline(cin, name) && !name.empty()) {//더 이상의 입력이 없으면
-        whole++;//전체 개수 증가
-        if (!tree[name]) { tree[name] = 0; }//처음 들어오는 입력값이면 0으로 설정
-        tree[name]++;//해당 value 증가
+int whole = 0;
+
+class TrieNode {
+public:
+    unordered_map<char, TrieNode*> children;
+    bool isEndOfWord;
+    int num = 0;
+
+    TrieNode() {
+        isEndOfWord = false;
+    }
+};
+
+class Trie {
+private:
+    TrieNode* root;
+
+public:
+    Trie() {
+        root = new TrieNode();
     }
 
-    for (auto iter : tree) {//tree가 더 이상 없을 때까지
-        cout.precision(4);//소수점 제한
-        //해당 tree 이름 비율(=개수/전체*100) 순으로 출력
-        cout << fixed << iter.first << " " << ((double)iter.second / whole) * 100 << "\n";
+    void insert(const string& word) {
+        TrieNode* current = root;
+        whole++;
+        for (char c : word) {
+            if (current->children.find(c) == current->children.end()) {
+                current->children[c] = new TrieNode();
+            }
+            current = current->children[c];
+        }
+        current->isEndOfWord = true;
+        current->num++;
     }
+
+    int findWordNode(const string& word) {
+        TrieNode* current = root;
+        for (char c : word) {
+            if (current->children.find(c) == current->children.end()) {
+                return 0;
+            }
+            current = current->children[c];
+        }
+        return current->num;
+    }
+};
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    Trie trie;
+    set<string> trees;
+    string tree;
+    while (getline(cin, tree) && !tree.empty()) {
+        trie.insert(tree);
+        trees.insert(tree);
+    }
+
+    cout << fixed << setprecision(4);
+    for (const string& t : trees) {
+        double percentage = (double)trie.findWordNode(t) / whole * 100.0;
+        cout << t << " " << percentage << endl;
+    }
+
     return 0;
 }
