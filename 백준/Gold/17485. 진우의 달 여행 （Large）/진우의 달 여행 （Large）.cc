@@ -17,10 +17,7 @@ int main() {
     int n, m;
     cin >> n >> m;
     vector<vector<int>> fuel(n);
-    vector<vector<int>> direc(n);
-    for (int i = 0; i < n; i++) {
-        direc[i].resize(m);
-    }
+
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
             int tmp = 0;
