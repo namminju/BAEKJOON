@@ -13,10 +13,8 @@ void generate_subsets(const vector<pair<int, int>>& nums, int index, vector<pair
         return;
     }
 
-    // Exclude current element
     generate_subsets(nums, index + 1, subset, subsets);
 
-    // Include current element
     subset.push_back(nums[index]);
     generate_subsets(nums, index + 1, subset, subsets);
     subset.pop_back();
