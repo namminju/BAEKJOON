@@ -27,11 +27,7 @@ vector<vector<pair<int, int>>> generate_subsets(const vector<pair<int, int>>& nu
     return subsets;
 }
 
-void make_remove_string(const vector<pair<int, int>>& paren_pair, const string& original_str, string& str, int num, set<string>& result) {
-    if (num == 0) {
-        result.insert(str);
-        return;
-    }
+void make_remove_string(const vector<pair<int, int>>& paren_pair, const string original_str, set<string>& result) {
 
     for (const auto& subset : generate_subsets(paren_pair)) {
         string modified_str = original_str;
@@ -65,9 +61,9 @@ int main() {
     }
 
     set<string> result;
-    for (int i = 1; i <= paren_pair.size(); i++) {
-        make_remove_string(paren_pair, str, str, i, result);
-    }
+    
+    make_remove_string(paren_pair, str, result);
+
 
     for (const auto& r : result) {
         if (r != str) {
