@@ -2,11 +2,10 @@
 #include <vector>
 using namespace std;
 
-const int MAX_N = 401;
-int graph[MAX_N][MAX_N];
+int graph[401][401] = {0};
 
 void floydWarshall(int n) {
-    // 플로이드-워셜 알고리즘을 이용하여 사건 간 전후 관계를 찾는다.
+    // 플로이드-워셜 알고리즘
     for (int k = 1; k <= n; ++k) { // 중간 노드
         for (int i = 1; i <= n; ++i) { // 출발 노드
             for (int j = 1; j <= n; ++j) { // 도착 노드
@@ -28,16 +27,6 @@ int main() {
     int n, k, s;
     cin >> n >> k;
 
-    // 그래프 초기화
-    for (int i = 1; i <= n; ++i) {
-        for (int j = 1; j <= n; ++j) {
-            if (i != j) {
-                graph[i][j] = 0; // 0은 전후 관계를 모름
-            }
-        }
-    }
-
-    // 사건의 전후 관계 입력
     for (int i = 0; i < k; ++i) {
         int past, future;
         cin >> past >> future;
