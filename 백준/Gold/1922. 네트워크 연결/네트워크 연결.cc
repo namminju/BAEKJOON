@@ -67,14 +67,13 @@ int main() {
 
     UnionFind uf(n);
     int mst_cost = 0;
-    vector<Route> mst;
 
     for (const auto& route : routes) {
         if (uf.unionSets(route.a, route.b)) {
             mst_cost += route.cost;
-            mst.push_back(route);
         }
     }
+
 
     cout << mst_cost << '\n';
 
