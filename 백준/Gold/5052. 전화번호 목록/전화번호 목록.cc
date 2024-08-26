@@ -62,7 +62,7 @@ int main() {
     cout.tie(NULL);
 
     cin >> t;
-    while (t--) {
+    for (int i = 0; i < t; i++) {
         int n;
         cin >> n;
         vector<string> phoneNumbers(n);
