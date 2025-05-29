@@ -1,48 +1,45 @@
 import java.util.*;
 
 class Solution {
-    public int diff(String str1, String str2){
+    public int diffNum(String begin, String target){
         int count = 0;
-        for(int i=0;i<str1.length();i++){
-            if(str1.charAt(i)!=str2.charAt(i)){
+        for(int i=0;i<begin.length();i++){
+            if(begin.charAt(i)!=target.charAt(i)){
                 count++;
             }
         }
         return count;
     }
     public class Node{
-        public String str;
+        public String word;
         public int depth;
-        Node(String str, int depth){
-            this.str = str;
+        
+        Node(String word, int depth){
+            this.word = word;
             this.depth = depth;
         }
     }
     public int solution(String begin, String target, String[] words) {
         int answer = 0;
-        Deque<Node> deque = new ArrayDeque<>();
         Map<String, Boolean> visited = new HashMap<>();
+        Deque<Node> deque = new ArrayDeque<>();
         
         deque.addLast(new Node(begin, 0));
         visited.put(begin, true);
         
         while(!deque.isEmpty()){
             Node cur = deque.removeFirst();
-            if(cur.str.equals(target)){
+            if(cur.word.equals(target)){
                 answer = cur.depth;
-                break; 
             }
-            for(String word : words){
-                if(
-                    diff(cur.str, word)==1
-                    && !visited.getOrDefault(word, false)
-                  ){
-                    deque.addLast(new Node(word, cur.depth + 1));
-                    visited.put(word, true);
+            for(String w: words){
+                if(diffNum(cur.word, w)==1 && !visited.getOrDefault(w, false)){
+                    deque.addLast(new Node(w, cur.depth+1));
+                    visited.put(w, true);
                 }
             }
-            
         }
+        
         return answer;
     }
 }
