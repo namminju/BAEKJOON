@@ -6,37 +6,38 @@ class Solution {
     
     public int solution(int[][] maps) {
         int answer = -1;
+        int n = maps.length;
+        int m = maps[0].length;
         
-        boolean[][] visited = new boolean[maps.length][maps[0].length];
+        boolean[][] visited = new boolean[n][m];
         
         Deque<int[]> deque = new ArrayDeque<>();
         
-        deque.addLast(new int[]{0,0,1});
-        //x,y,depth
-        visited[0][0]=true;
-        
+        deque.addLast(new int[]{0, 0, 1});
+        visited[0][0] = true;
+                      
         while(!deque.isEmpty()){
             int[] cur = deque.removeFirst();
             
-            if(cur[0]==maps.length-1 && cur[1]==maps[0].length-1){
+            if(cur[0]==n-1 && cur[1]==m-1){
                 answer = cur[2];
-                break; 
+                break;
             }
             
             for(int i=0;i<4;i++){
                 int nx = cur[0] + dx[i];
                 int ny = cur[1] + dy[i];
                 
-                if(nx<0 || ny<0 || nx>=maps.length || ny>=maps[0].length){
+                if(nx<0 || ny<0 || nx>=n || ny>=m){
                     continue;
                 }
-                if(!visited[nx][ny]
-                  && maps[nx][ny]==1){
-                     deque.addLast(new int[]{nx,ny,cur[2]+1});
-                    //x,y,depth
+                
+                if(maps[nx][ny]==1 && !visited[nx][ny]){
+                    deque.addLast(new int[]{nx, ny, cur[2]+1});
                     visited[nx][ny]=true;
                 }
             }
+            
         }
         
         return answer;
