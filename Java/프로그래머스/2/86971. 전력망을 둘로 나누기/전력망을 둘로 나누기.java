@@ -1,28 +1,28 @@
 import java.util.*;
 
 class Solution {
-
-    public Map<Integer, List<Integer>> map = new HashMap<>();
-    public boolean[] visited;
-    public int[] child;
-    
-    public int childNum(int n){
-        int count = 1; //본인
-        visited[n] = true;
-        for(int c: map.getOrDefault(n, new ArrayList<>())){//자식의 자식 개수 더하기
+    Map<Integer, List<Integer>> map = new HashMap<>();
+    boolean[] visited;
+    int[] num;
+    public int getChild(int n){
+        int count = 1;
+        visited[n]=true;
+        
+        List<Integer> child = map.getOrDefault(n, new ArrayList<>());
+        for(int c: child){
             if(!visited[c]){
-                count += childNum(c);
-            }
+                count+=getChild(c);
+            }            
         }
-        child[n] = count;
+        num[n] = count;
         return count;
     }
     public int solution(int n, int[][] wires) {
         int answer = n;
+        num = new int[n+1];
         visited = new boolean[n+1];
-        child = new int[n+1];
         
-        for(int[] wire: wires){
+        for(int[] wire : wires){
             List<Integer> list = map.getOrDefault(wire[0], new ArrayList<>());
             list.add(wire[1]);
             map.put(wire[0], list);
@@ -31,10 +31,11 @@ class Solution {
             list.add(wire[0]);
             map.put(wire[1], list);
         }
-        childNum(1);
         
-        for(int c: child){
-            answer = Math.min(answer, Math.abs((n-c)-c));
+        getChild(1);
+        
+        for(int i: num){
+            answer = Math.min(answer, Math.abs(n-i*2));
         }
         return answer;
     }
