@@ -8,12 +8,9 @@ class Solution {
         boolean[] top = new boolean[n+1];
         Map<Integer, List<int[]>> map = new HashMap<>();
         PriorityQueue<int[]> pq = new PriorityQueue<>(
-            (a,b)->{
-                if(a[1]!=b[1]){
-                    return a[1]-b[1];
-                }
-                    return a[0]-b[0];
-                }
+            (a,b)->{ 
+                    return a[1]-b[1];}
+           
         );
         // 도착점, 기중치 
         
@@ -36,43 +33,29 @@ class Solution {
         }
         
         while(!pq.isEmpty()){
-            int[] cur = pq.remove();
-            // System.out.println(cur[0]+ ": "+ cur[1]);
-            
+            int[] cur = pq.remove(); 
+            if (cur[1] > values[cur[0]]) continue;
             //도착점이면 
             if(top[cur[0]]){
-  
-                //System.out.println(cur[0]+":"+values[cur[0]]+"<="+ answer[1]+":"+values[cur[0]]);
-                if(values[cur[0]]<=answer[1]){
+                  if(values[cur[0]]<=answer[1]){
                     answer[0] = Math.min(answer[0], cur[0]);
                 }
                  answer[1] = Math.min(answer[1], values[cur[0]]);
- 
                 //값 작은 걸로
-     
+                continue;
             }   
-            else{
-                            //연결된 지점들에 대해서
+          
+            //연결된 지점들에 대해서
             for(int[] next : map.getOrDefault(cur[0], new ArrayList<>())){
-               
-                // 가중치가 다음 지점의 값보다 큰 경우 패스 
-                if(cur[1]>=values[next[0]]){
-                    continue;
-                }
                 // 다음 지점의 값보다 현재 가는 것이 작을 때
                 if(values[next[0]] > Math.max(values[cur[0]], next[1])){
                     //현재 값으로 업데이트
-                      
                     values[next[0]]=Math.max(values[cur[0]], next[1]);
-                    // System.out.println(values[cur[0]]+" vs "+ next[1]);
-                    // System.out.println(cur[0]+ " -> "+ next[0]+": "+values[next[0]]);
                     // 다음 지점, 가중치, 출발점
-                    pq.add(new int[]{next[0], next[1]});
+                    pq.add(new int[]{next[0], values[next[0]]});
                 }
             }
-            }
-
-       
+            
         }
 
  
