@@ -1,41 +1,33 @@
 import java.util.*;
 
 class Solution {
-
-    public Map<Integer, List<Integer>> map = new HashMap<>();
-    public boolean[] visited;
-    public int[] child;
-    
-    public int childNum(int n){
-        int count = 1; //본인
-        visited[n] = true;
-        for(int c: map.getOrDefault(n, new ArrayList<>())){//자식의 자식 개수 더하기
+    Map<Integer, List<Integer>> map = new HashMap<>();
+    boolean[] visited = new boolean[101];
+    int total = 0;
+    int min = 100;
+    public int getchild(int n){
+        int count = 1;
+        for(int c: map.getOrDefault(n, new ArrayList<>())){
             if(!visited[c]){
-                count += childNum(c);
+                visited[c]=true;
+                count+=getchild(c);
             }
         }
-        child[n] = count;
+        min = Math.min(min,Math.abs((total - count) -count));
         return count;
     }
     public int solution(int n, int[][] wires) {
         int answer = n;
-        visited = new boolean[n+1];
-        child = new int[n+1];
-        
+    
         for(int[] wire: wires){
-            List<Integer> list = map.getOrDefault(wire[0], new ArrayList<>());
-            list.add(wire[1]);
-            map.put(wire[0], list);
-            
-            list = map.getOrDefault(wire[1], new ArrayList<>());
-            list.add(wire[0]);
-            map.put(wire[1], list);
+            map.computeIfAbsent(wire[0], k->new ArrayList<>()).add(wire[1]);
+            map.computeIfAbsent(wire[1], k->new ArrayList<>()).add(wire[0]);
         }
-        childNum(1);
-        
-        for(int c: child){
-            answer = Math.min(answer, Math.abs(n-c*2));
-        }
-        return answer;
+        total = n;
+                
+        visited[1]=true;
+        getchild(1);
+
+        return min;
     }
 }
