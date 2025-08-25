@@ -1,77 +1,71 @@
+//  Link: https://www.acmicpc.net/problem/14442
+
 import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 
 public class Main {
-    public static final int[] dx = {0, 0,  -1, 1};
-    public static final int[] dy = {1, -1, 0, 0};
+    //상하좌우 이동
+    public static int[] dx = {0, 0, 1, -1};
+    public static int[] dy = {1, -1, 0, 0};
+
+    //방문여부 배열
+    public static boolean[][][] visited;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        int[] input = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-        //input - 0: 줄, 1: 개수(줄 별), 2: 벽 부수기 가능 횟수
-        int[][] grid = new int[input[0]][input[1]];
 
-        boolean[][][] visited = new boolean[input[0]][input[1]][input[2]+1];
-        //세로, 가로, 부순 횟수
+        //결과값 (방문 불가시 -1)
+        int result = -1;
 
-        boolean isPossible = false;
+        String input = br.readLine();
+        String[] inputArray = input.split(" ");
+        // 목적지 (n, m)
+        int n = Integer.parseInt(inputArray[0]);
+        int m = Integer.parseInt(inputArray[1]);
 
-        for (int i = 0; i < input[0]; i++) {
-            grid[i] = Arrays.stream(br.readLine().split("")).mapToInt(Integer::parseInt).toArray();
+        //부술 수 있는 벽의 개수
+        int k = Integer.parseInt(inputArray[2]);
 
+        int[][] matrix = new int[n][m];
+        visited = new boolean[n][m][k + 1];
+
+        for (int i = 0; i < n; i++) {
+            int[] line = Arrays.stream(br.readLine().split("")).mapToInt(Integer::parseInt).toArray();
+            matrix[i] = line;
         }
 
         Deque<int[]> deque = new ArrayDeque<>();
-        // Y, X, 이동 거리, 부순 횟수
+        //초기값
         deque.addLast(new int[]{0, 0, 1, 0});
         visited[0][0][0] = true;
+        // 위치 n,m ,  이동거리, 파괴한 벽의 수
 
-        while(!deque.isEmpty()) {
-            int[] now = deque.removeFirst();
-
-            int x = now[0], y = now[1], dep = now[2], bNum=now[3];
-
-            if(x==input[0]-1 && y==input[1]-1) {
-                bw.write(String.valueOf(dep));
-                isPossible = true;
+        while (!deque.isEmpty()) {
+            int[] cur = deque.removeFirst();
+            if (cur[0] == n - 1 && cur[1] == m - 1) {
+                result = cur[2];
                 break;
             }
-
-            for(int i = 0; i < 4; i++) {
-                    int nx = x + dx[i];
-                    int ny = y + dy[i];
-
-                    //불가능한 경우는 Continue
-                    if(nx < 0 || ny < 0 || nx >= input[0] || ny >= input[1]){
-                        continue;
-                    }
-//                    System.out.println(nx+","+ny+": "+grid[nx][ny]+ "-->" +bNum);
-                    //벽 안부수는 경우 + visited 체크 필요
-                    if(grid[nx][ny]==0 && !visited[nx][ny][bNum]){
-                        deque.addLast(new int[]{nx, ny, dep+1, bNum});
-                        //visited 업데이트
-                        visited[nx][ny][bNum] = true;
-                    }
-
-                    //벽 부술 수 있는 경우 + visited 체크 필요
-                    else if(bNum<input[2] && !visited[nx][ny][bNum+1]){
-                        deque.addLast(new int[]{nx, ny, dep+1, bNum+1});
-                        //visited 업데이트
-                        visited[nx][ny][bNum+1] = true;
-                    }
-           }
+            for (int i = 0; i < 4; i++) {
+                int nx = cur[0] + dx[i];
+                int ny = cur[1] + dy[i];
+                if (nx < 0 || ny < 0 || nx >= n || ny >= m) {
+                    continue;
+                }
+                if (matrix[nx][ny] == 0 && !visited[nx][ny][cur[3]]) {
+                    deque.addLast(new int[]{nx, ny, cur[2] + 1, cur[3]});
+                    visited[nx][ny][cur[3]] = true;
+                } else if (matrix[nx][ny] == 1 && cur[3] < k && !visited[nx][ny][cur[3] + 1]) {
+                    deque.addLast(new int[]{nx, ny, cur[2] + 1, cur[3] + 1});
+                    visited[nx][ny][cur[3] + 1] = true;
+                }
+            }
 
         }
-        // 도착지에 도착하지 못한 경우
-        if(!isPossible){
-            bw.write("-1");
-        }
-
-        br.close();
+        bw.write(result + "");
         bw.flush();
-        bw.close();
     }
 }
