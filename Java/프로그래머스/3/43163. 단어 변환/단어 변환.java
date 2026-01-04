@@ -1,50 +1,47 @@
 import java.util.*;
 
 class Solution {
-    public class Word{
-        public String word;
-        public int deg;
+    class Word{
+        String wrd;
+        int cnt;
         
-        public Word(String word, int deg){
-            this.word = word;
-            this.deg = deg;
+        Word(String wrd, int cnt){
+            this.wrd = wrd;
+            this.cnt = cnt;
         }
     }
-    public int diff(String word, String target){
-        int count = 0;
-        for(int i=0;i<word.length();i++){
-            if(word.charAt(i)!=target.charAt(i)){
-                count++;
-            }
-        }
-        return count;
+    public boolean difOne(String origin, String dif){
+        int cnt = 0;
+        for(int i=0;i<origin.length();i++){
+            if(cnt>1) return false;
+            if(origin.charAt(i)!=dif.charAt(i)) cnt++;
+        } 
+
+        return cnt == 1;
     }
+    
+    Deque<Word> dq= new ArrayDeque<>();
+    
     public int solution(String begin, String target, String[] words) {
         int answer = 0;
+        boolean[] visited = new boolean[words.length];
+        dq.add(new Word(begin, 0));
         
-        Map<String, Boolean> map = new HashMap<>();
-        Deque<Word> deque = new ArrayDeque<>();
-        
-        deque.add(new Word(begin, 0));
-        map.put(begin, true);
-        
-        while(!deque.isEmpty()){
-            Word cur = deque.removeFirst();
-            
- 
-            if(cur.word.equals(target)){
-                answer = cur.deg;
+        while(!dq.isEmpty()){
+            Word cur = dq.removeFirst();
+            //System.out.println(cur.wrd+", "+cur.cnt);
+            if(cur.wrd.equals(target)){
+                answer = cur.cnt;
                 break;
             }
-            
-            for(String word : words){
-                if(!map.getOrDefault(word, false) && diff(cur.word, word) == 1){
-                    deque.addLast(new Word(word, cur.deg+1));
-                    map.put(word, true);
+            for(int i=0;i<words.length;i++){
+                String word = words[i];
+                if(!visited[i] && difOne(cur.wrd, word)){
+                    visited[i] = true;
+                    dq.addLast(new Word(word, cur.cnt+1));
                 }
-            }
+            } 
         }
-        
         
         return answer;
     }
