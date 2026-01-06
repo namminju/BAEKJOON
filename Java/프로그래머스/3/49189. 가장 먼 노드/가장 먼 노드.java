@@ -1,43 +1,36 @@
 import java.util.*;
 
 class Solution {
+    Deque<int[]> dq = new ArrayDeque<>();
+    Map<Integer, List<Integer>> map = new HashMap<>();
     public int solution(int n, int[][] edge) {
         int answer = 0;
-        
-        Map<Integer, List<Integer>> map = new HashMap<>();
+        int max = 0;
         boolean[] visited = new boolean[n+1];
         
-        for(int[] e:edge){
-            List<Integer> list = map.getOrDefault(e[0], new ArrayList<>());
-            list.add(e[1]);
-            map.put(e[0], list);
-            
-            list = map.getOrDefault(e[1], new ArrayList<>());
-            list.add(e[0]);
-            map.put(e[1], list);
+        for(int[] e: edge){
+            map.computeIfAbsent(e[0], k-> new ArrayList<>()).add(e[1]);
+            map.computeIfAbsent(e[1], k-> new ArrayList<>()).add(e[0]);
         }
         
-        Deque<int[]> deque = new ArrayDeque<>();
-        deque.add(new int[]{1, 1});
-        visited[1]=true;
+        //시작점 추가
+        visited[1] = true;
+        dq.add(new int[]{1, 0});
         
-        int max = 0;
-        while(!deque.isEmpty()){
-            int[] cur = deque.removeFirst();
+        while(!dq.isEmpty()){
+            int[] cur = dq.remove();
             if(cur[1]>max){
-                answer=0;
                 max = cur[1];
+                answer = 0;
             }
-            if(cur[1]==max){
+            if(cur[1] == max){
                 answer++;
             }
             
-            for(int i: map.getOrDefault(cur[0], new ArrayList<>())){
-                if(!visited[i]){
-                    deque.add(new int[]{i, cur[1]+1});
-                    visited[i]=true;
-                }
-                
+            for(int next: map.getOrDefault(cur[0], new ArrayList<>())){
+                if(visited[next]) continue;
+                visited[next] = true;
+                dq.add(new int[]{next, cur[1]+1});
             }
         }
         return answer;
